@@ -6,6 +6,7 @@ import {
 } from "./validation.js";
 import Api from "./utils/Api.js";
 import "../pages/index.css";
+import { setButtonText } from "./utils/helpers.js";
 
 const api = new Api({
   baseUrl: "https://around-api.en.tripleten-services.com/v1",
@@ -66,12 +67,10 @@ api
   .then(([cards, userData]) => {
     currentUserId = userData._id;
 
-    // Bunu ayrı çağır, önce currentUserId gelsin
     profileName.textContent = userData.name;
     profileDescription.textContent = userData.about;
     profileAvatar.src = userData.avatar;
 
-    // Kartları currentUserId tanımlandıktan sonra oluştur
     cards.forEach((item) => {
       const cardEl = getCardElement(item);
       cardList.append(cardEl);
@@ -81,6 +80,7 @@ api
 
 function handleAddCardSubmit(evt) {
   evt.preventDefault();
+  setButtonText(cardSubmitBtn, true);
 
   const inputValues = {
     name: cardNameInput.value,
@@ -100,7 +100,63 @@ function handleAddCardSubmit(evt) {
       disableButton(cardSubmitBtn, settings);
       closeModal(cardModal);
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      setButtonText(cardSubmitBtn, false);
+    });
+}
+
+function handleEditFormSubmit(evt) {
+  evt.preventDefault();
+  const submitBtn = editFormElement.querySelector(".modal__submit-btn");
+  setButtonText(submitBtn, true);
+
+  api
+    .editUserInfo({
+      name: editModalNameInput.value,
+      about: editModalDescriptionInput.value,
+    })
+    .then((data) => {
+      profileName.textContent = data.name;
+      profileDescription.textContent = data.about;
+      closeModal(editModal);
+    })
+    .catch(console.error)
+    .finally(() => {
+      setButtonText(submitBtn, false);
+    });
+}
+
+function handleAvatarSubmit(evt) {
+  evt.preventDefault();
+  setButtonText(avatarSubmitBtn, true);
+
+  api
+    .editAvatarInfo(avatarLinkInput.value)
+    .then((data) => {
+      profileAvatar.src = data.avatar;
+      closeModal(avatarModal);
+    })
+    .catch(console.error)
+    .finally(() => {
+      setButtonText(avatarSubmitBtn, false);
+    });
+}
+
+function handleDeleteSubmit(evt) {
+  evt.preventDefault();
+  setButtonText(confirmDeleteBtn, true, "Delete", "Deleting...");
+
+  api
+    .deleteCard(selectedCardId)
+    .then(() => {
+      selectedCard.remove();
+      closeModal(deleteModal);
+    })
+    .catch(console.error)
+    .finally(() => {
+      setButtonText(confirmDeleteBtn, false, "Delete", "Deleting...");
+    });
 }
 
 function openPreviewModal(imageSrc, caption) {
@@ -109,8 +165,6 @@ function openPreviewModal(imageSrc, caption) {
   previewModalImageEl.alt = caption;
   openModal(previewModal);
 }
-
-closePreviewModalBtn.addEventListener("click", () => closeModal(previewModal));
 
 function getCardElement(data) {
   const cardElement = cardTemplate.content
@@ -125,7 +179,6 @@ function getCardElement(data) {
   cardImageEl.src = data.link;
   cardImageEl.alt = data.name;
 
-  // Kalp ikonu başta aktif mi?
   if (data.isLiked) {
     cardLikeBtn.classList.add("card__like-btn_liked");
   }
@@ -159,17 +212,6 @@ function handleLike(evt, id, likeButton) {
     .catch((err) => console.error("Like error:", err));
 }
 
-function handleDeleteSubmit(evt) {
-  evt.preventDefault();
-  api
-    .deleteCard(selectedCardId)
-    .then(() => {
-      selectedCard.remove();
-      closeModal(deleteModal);
-    })
-    .catch(console.error);
-}
-
 function handleDeleteCard(cardElement, cardId) {
   selectedCard = cardElement;
   selectedCardId = cardId;
@@ -201,32 +243,6 @@ function closeModal(modal) {
   modal.classList.remove("modal_is-opened");
   document.removeEventListener("keydown", closeModalByEscape);
   modal.removeEventListener("click", closeModalByOverlay);
-}
-
-function handleEditFormSubmit(evt) {
-  evt.preventDefault();
-  api
-    .editUserInfo({
-      name: editModalNameInput.value,
-      about: editModalDescriptionInput.value,
-    })
-    .then((data) => {
-      profileName.textContent = data.name;
-      profileDescription.textContent = data.about;
-      closeModal(editModal);
-    })
-    .catch(console.error);
-}
-
-function handleAvatarSubmit(evt) {
-  evt.preventDefault();
-  closeModal(avatarModal);
-  api
-    .editAvatarInfo(avatarLinkInput.value)
-    .then((data) => {
-      profileAvatar.src = data.avatar;
-    })
-    .catch(console.error);
 }
 
 editModalBtn.addEventListener("click", () => {
