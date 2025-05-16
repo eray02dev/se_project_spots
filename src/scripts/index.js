@@ -257,6 +257,9 @@ cardModalCloseBtn.addEventListener("click", () => closeModal(cardModal));
 avatarModalBtn.addEventListener("click", () => openModal(avatarModal));
 avatarModalCloseBtn.addEventListener("click", () => closeModal(avatarModal));
 
+editModalCloseBtn.addEventListener("click", () => closeModal(editModal));
+closePreviewModalBtn.addEventListener("click", () => closeModal(previewModal));
+
 avatarFormElement.addEventListener("submit", handleAvatarSubmit);
 editFormElement.addEventListener("submit", handleEditFormSubmit);
 cardFormElement.addEventListener("submit", handleAddCardSubmit);
