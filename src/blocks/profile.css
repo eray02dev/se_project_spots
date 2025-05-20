@@ -4,10 +4,54 @@
   border-bottom: 1px rgba(33, 33, 33, 0.4) solid;
 }
 
-.profile__avatar {
-  height: 190px;
+.profile__pencil-icon {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+.profile__avatar-container {
+  position: relative;
   width: 190px;
-  margin-right: 20px;
+  height: 190px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-right: 24px;
+}
+
+.profile__avatar-btn {
+  position: absolute;
+  bottom: 12px;
+  left: 39px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background: transparent;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+
+  padding: 4px 8px;
+  border: none;
+  border-radius: 90px;
+  cursor: pointer;
+
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.profile__avatar-container:hover .profile__avatar-btn {
+  visibility: visible;
+  opacity: 1;
+}
+
+.profile__avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 8px;
 }
 
@@ -99,11 +143,58 @@
     padding-top: 20px;
   }
 
-  .profile__avatar {
-    margin-bottom: 12px;
-    margin-right: 0;
-    height: 80px;
+  .profile__avatar-container {
     width: 80px;
+    height: 80px;
+    margin: 0 auto 12px;
+    position: relative;
+  }
+
+  .profile__avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 0;
+  }
+
+  .profile__avatar-text {
+    display: none;
+  }
+
+  .profile__avatar-btn {
+    position: absolute;
+    top: 52px;
+    left: 52px;
+
+    width: 23.34px;
+    height: 23.34px;
+    padding: 0;
+    background: rgba(33, 33, 33, 0.6);
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    visibility: visible;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    box-sizing: content-box;
+    transform: translate(2px, 2px);
+  }
+
+  .profile__avatar-container:hover .profile__avatar-btn {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .profile__pencil-icon {
+    width: 16px;
+    height: 16px;
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
   }
 
   .profile__name {
@@ -121,6 +212,7 @@
     align-items: center;
     margin: 0 0 20px;
   }
+
   .profile__add-btn {
     margin: 0;
     width: 100%;
