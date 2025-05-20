@@ -47,6 +47,7 @@ const avatarLinkInput = avatarModal.querySelector("#profile-avatar-input");
 const deleteModal = document.querySelector("#delete-modal");
 const confirmDeleteBtn = deleteModal.querySelector('button[type="submit"]');
 const cancelDeleteBtn = document.querySelector("#cancel-delete-btn");
+const deleteModalCloseBtn = deleteModal.querySelector(".modal__close");
 const deleteForm = deleteModal.querySelector(".modal__form");
 
 const cardTemplate = document.querySelector("#card-template");
@@ -258,6 +259,7 @@ avatarModalBtn.addEventListener("click", () => openModal(avatarModal));
 avatarModalCloseBtn.addEventListener("click", () => closeModal(avatarModal));
 
 editModalCloseBtn.addEventListener("click", () => closeModal(editModal));
+deleteModalCloseBtn.addEventListener("click", () => closeModal(deleteModal));
 closePreviewModalBtn.addEventListener("click", () => closeModal(previewModal));
 
 avatarFormElement.addEventListener("submit", handleAvatarSubmit);
